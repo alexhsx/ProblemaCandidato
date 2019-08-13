@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidatos - Candidatos</title>
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+    <SCRIPT LANGUAGE="JavaScript">
+        function ObterPosicaoCandidato(form) {
+            let resultado = 0;
+            let numerosUsados = [];
+            let numeroCandidato = form.NumeroCandidato.value;
+            if (numeroCandidato == "") {
+                form.Posicao.value = "Número digitado inválido!";
+                return;
+            }
+            for (let i = 0; i < numeroCandidato.length; i++) {
+                let digito = numeroCandidato[i];
+
+                if (numeroCandidato.length != 5) {
+                    form.Posicao.value = "Número digitado inválido!";
+                    return;
+                }
+
+                if (isNaN(digito)) {
+                    form.Posicao.value = "Número digitado inválido!";
+                    return;
+                }
+
+                if (digito % 2 == 0) {
+                    form.Posicao.value = "Número digitado inválido!";
+                    return;
+                }
+
+                if (numerosUsados.find(n => n == digito) != null) {
+                    form.Posicao.value = "Número digitado inválido!";
+                    return;
+                }
+
+                numerosUsados.push(digito);
+
+                let qtdUsados = numerosUsados.filter(n => n < digito);
+                qtdUsados = qtdUsados ? qtdUsados.length : 0;
+
+                let qtd = ObterQtdNumeroImparMenor(digito) - qtdUsados;
+
+                resultado += qtd * Fatorial(numeroCandidato.length - i - 1);
+            }
+            form.Posicao.value = resultado + 1;
+        }
+
+        function ObterQtdNumeroImparMenor(numero) {
+
+            return numero - 1 <= 0 ? 0 : (numero - 1) / 2;
+        }
+
+        function Fatorial(fator) {
+            return fator <= 1 ? 1 : fator * Fatorial(fator - 1);
+        }
+    </SCRIPT>
+
+<body data-gr-c-s-loaded="true">
+    <div class="container-contact100">
+        <div class="wrap-contact100">
+            <form class="contact100-form validate-form">
+                <span class="contact100-form-title">
+                    Saiba sua posição!
+                </span>
+                <div class="wrap-input100 validate-input">
+                    <span class="label-input100">Informe seu número de candidato</span>
+                    <input class="input100" type="text" placeholder="Número de candidato" id="NumeroCandidato"
+                        name="NumeroCandidato">
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" disabled="true" type="text" placeholder="Sua posição" id="Posicao"
+                        name="Posicao">
+                    <span class="focus-input100"></span>
+                </div>
+
+
+                <input type="button" value="Gerar" style="background:#80c64a;" class="contact100-form-btn"
+                    onClick="ObterPosicaoCandidato(this.form)">
+            </form>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
